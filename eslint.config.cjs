@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	parser: "@typescript-eslint/parser",
 	extends: [
 		"prettier",
@@ -8,6 +8,9 @@ module.exports = {
 		"plugin:import/errors",
 		"plugin:import/warnings",
 		"plugin:import/typescript",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:import/typescript",
+		"plugin:eslint-plugin-import",
 	],
 	plugins: ["@typescript-eslint", "prettier", "import"],
 	parserOptions: {
@@ -28,6 +31,39 @@ module.exports = {
 		"import/order": [
 			"warn",
 			{
+				groups: [
+					"builtin", // Módulos nativos do Node.js (fs, path, etc.)
+					["external", "type"], // Pacotes externos (react, next, etc.)
+
+					["internal", "parent", "sibling"], // Tudo que é do projeto mas não é um estilo
+
+					"index", // Imports do próprio diretório (./)
+
+					["unknown"], // Qualquer outra coisa que não se encaixe nos grupos acima
+				],
+				pathGroups: [
+					{
+						pattern: "@/usecases/**",
+						group: "internal",
+						position: "before",
+					},
+					{
+						pattern: "@/controllers/**",
+						group: "internal",
+						position: "before",
+					},
+					{
+						pattern: "@/utils/**",
+						group: "internal",
+						position: "before",
+					},
+					{
+						pattern: ["@/interface/**", "@/types/**"],
+						group: "internal",
+						position: "before",
+					},
+				],
+				pathGroupsExcludedImportTypes: ["builtin"],
 				alphabetize: { order: "asc", caseInsensitive: true },
 				"newlines-between": "always",
 			},
@@ -38,7 +74,7 @@ module.exports = {
 				ignoreCase: true,
 				ignoreDeclarationSort: true,
 				ignoreMemberSort: false,
-				memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
+				memberSyntaxSortOrder: ["single", "none", "all", "multiple"],
 			},
 		],
 		"no-multi-spaces": "error",
@@ -54,6 +90,6 @@ module.exports = {
 				message: "$match can be used consecutively.",
 			},
 		],
-		"prettier/prettier": "error",
+		"prettier/prettier": ["error", { endOfLine: "auto" }],
 	},
 };

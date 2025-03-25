@@ -1,13 +1,8 @@
-type IDefaultReturn<T> = IReturnError | IReturnSuccess<T>;
-interface IReturnError {
-	is_error: true;
-	message: string;
+interface IDefaultReturn<T> {
+	is_error: boolean;
+	message?: string;
 	status_code?: number;
-}
-
-interface IReturnSuccess<T> {
-	is_error: false;
-	response: T;
+	response?: T;
 }
 
 export { IDefaultReturn };

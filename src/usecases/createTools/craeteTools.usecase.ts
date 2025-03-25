@@ -17,7 +17,7 @@ class CreateToolsUsecase implements ICreateToolsUsecase {
 		// Check if this tool already exists
 		const toolWithSameTitleExists = await this.toolsRepository.findOneByTitle(dataCreate.title);
 		if (toolWithSameTitleExists) {
-			return { is_error: true, message: "Tool with same title already exists" };
+			return { is_error: true, message: "Tool with same title already exists", status_code: 400 };
 		}
 
 		const result = await this.toolsRepository.create(dataCreate);
@@ -39,7 +39,18 @@ class CreateToolsUsecase implements ICreateToolsUsecase {
 					}
 				}),
 			description: yup.string().required("Description is required").min(3, "Description must be at least 3 characters"),
-			tags: yup.array().required("Tags are required").min(1, "At least one tag is required").of(yup.string().required("Tag is required")),
+			tags: yup
+				.array()
+				.required("Tags are required")
+				.min(1, "At least one tag is required")
+				.of(
+					yup
+						.string()
+						.strict()
+						.required("Tag is required")
+						.min(3, "Tag must be at least 3 characters")
+						.test("tag", "Tag must be a string", value => typeof value === "string" && !isNaN(Number(value)) === false),
+				),
 		};
 
 		const errors = YupValidate(schema, dataCreate);

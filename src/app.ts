@@ -1,9 +1,9 @@
-import "dotenv";
+import "dotenv/config";
 import "express-async-errors";
 
 import express, { Application } from "express";
 import mongoose from "mongoose";
-import { Routes } from "./Routes.ts";
+import { Routes } from "./routes.ts";
 class App {
 	private application: Application;
 

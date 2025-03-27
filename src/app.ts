@@ -4,6 +4,7 @@ import "express-async-errors";
 import express, { Application } from "express";
 import mongoose from "mongoose";
 import { Routes } from "./routes.ts";
+import { generateSwaggerDoc } from "./swagger.ts";
 class App {
 	private application: Application;
 
@@ -20,6 +21,8 @@ class App {
 		this.application.use(express.json());
 
 		this.application.disable("x-powered-by");
+
+		generateSwaggerDoc();
 
 		mongoose
 			.connect(process.env.MONGODB_URL!, { dbName: process.env.MONGODB_NAME! })

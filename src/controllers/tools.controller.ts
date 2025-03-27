@@ -10,11 +10,11 @@ class ToolsController {
 			const result = await this.createToolsUsecase.execute({ title, link, description, tags });
 
 			if (result.is_error) {
-				res.status(result.status_code || 400).json(result);
+				res.status(result.status_code || 400).json({ ...result, status_code: undefined });
 				return;
 			}
 
-			res.status(201).json(result);
+			res.status(201).json({ ...result, status_code: undefined });
 			return;
 		} catch (error) {
 			let messageError = "Something went wrong";

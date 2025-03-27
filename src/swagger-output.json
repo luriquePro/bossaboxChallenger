@@ -1,0 +1,187 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bossbox Api Documentation",
+    "version": "1.0.0",
+    "description": "Bossabox Api Documentation - Using Swagger",
+    "contact": {
+      "email": "luiz.prog.henri@gmail.com",
+      "name": "Luiz Henrique",
+      "url": "https://github.com/luriquePro"
+    },
+    "x-logo": {
+      "url": "https://framerusercontent.com/images/4v2FtQL8pVhEsvAy90OuFGWAykU.png",
+      "backgroundColor": "#FFFFFF",
+      "altText": "BossaBox logo"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/luriquePro/bossaboxChallenger/blob/master/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/",
+      "description": "Local server",
+      "variables": {}
+    }
+  ],
+  "tags": [
+    {
+      "name": "Tools",
+      "description": "Endpoints to manage tools"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "DefaultError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The error message",
+            "default": "Something went wrong",
+            "example": "Something went wrong",
+            "required": true
+          },
+          "is_error": {
+            "type": "boolean",
+            "description": "The error status",
+            "default": true,
+            "example": true,
+            "required": true
+          }
+        },
+        "required": [
+          "message",
+          "is_error"
+        ]
+      },
+      "ToolsCreate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the tool",
+            "default": "Tool title"
+          },
+          "link": {
+            "type": "string",
+            "description": "The link of the tool",
+            "default": "https://example.com"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the tool",
+            "default": "Tool description"
+          },
+          "tags": {
+            "type": "array",
+            "description": "The tags of the tool",
+            "default": [
+              "tag1",
+              "tag2"
+            ]
+          }
+        },
+        "required": [
+          "title",
+          "link",
+          "description",
+          "tags"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/tools/{toolId}": {
+      "get": {
+        "tags": [
+          "Tools"
+        ]
+      }
+    },
+    "/tools/": {
+      "post": {
+        "summary": "Create a new tool",
+        "description": "Create a new tool with the provided data and return the created tool with its id and status",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToolsCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tools"
+                },
+                "example": {
+                  "is_error": false,
+                  "response": {
+                    "id": "1",
+                    "title": "Tool title",
+                    "link": "https://example.com",
+                    "description": "Tool description",
+                    "tags": [
+                      "tag1",
+                      "tag2"
+                    ],
+                    "status": "ACTIVE"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Tool with same title already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefaultError",
+                  "required": [
+                    "message",
+                    "is_error"
+                  ]
+                },
+                "example": {
+                  "is_error": true,
+                  "message": "Tool with same title already exists"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tools"
+        ]
+      },
+      "get": {
+        "tags": [
+          "Tools"
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Tools"
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Tools"
+        ]
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Github repository",
+    "url": "https://github.com/luriquePro/bossaboxChallenger/"
+  }
+}

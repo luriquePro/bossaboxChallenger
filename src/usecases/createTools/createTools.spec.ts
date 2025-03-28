@@ -12,6 +12,7 @@ describe("CreateToolsUsecase", () => {
 			create: jest.fn().mockImplementation(() => Promise.resolve(toolsDTO)) as IToolsRepository["create"],
 			findOneByObj: jest.fn() as IToolsRepository["findOneByObj"],
 			findOneByTitle: jest.fn() as IToolsRepository["findOneByTitle"],
+			findOneById: jest.fn() as IToolsRepository["findOneById"],
 		};
 
 		toolsDTO = {

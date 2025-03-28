@@ -1,14 +1,14 @@
 import * as yup from "yup";
 
 import { IDefaultReturn } from "../../interface/app.interface.ts";
-import { IToolsRepository, IToolsRepositoryReturnDTO } from "../../interface/tools.inteface.ts";
+import { IToolsRepository } from "../../interface/tools.inteface.ts";
 import { YupValidate } from "../../utils/YupValidate.ts";
-import { IGetToolEntryDTO, IGetToolUsecase } from "./getTool.interface.ts";
+import { IGetToolEntryDTO, IGetToolReturnDTO, IGetToolUsecase } from "./getTool.interface.ts";
 
 class GetToolusecase implements IGetToolUsecase {
 	constructor(private readonly toolsRepository: IToolsRepository) {}
 
-	public async execute(dataFilter: IGetToolEntryDTO): Promise<IDefaultReturn<IToolsRepositoryReturnDTO>> {
+	public async execute(dataFilter: IGetToolEntryDTO): Promise<IDefaultReturn<IGetToolReturnDTO>> {
 		const { isValid, errors } = this.validate(dataFilter);
 		if (!isValid && errors && errors.length) {
 			return { is_error: true, message: errors[0], status_code: 400 };
@@ -19,7 +19,7 @@ class GetToolusecase implements IGetToolUsecase {
 			return { is_error: true, message: "Tool with this id does not exist", status_code: 404 };
 		}
 
-		return { response: toolWithThisIdExists, is_error: false };
+		return { response: { ...toolWithThisIdExists, _id: undefined, __v: undefined }, is_error: false };
 	}
 
 	private validate(dataFilter: IGetToolEntryDTO) {

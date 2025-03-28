@@ -1,4 +1,5 @@
 import { IDefaultReturn } from "../../interface/app.interface.ts";
+import { IToolsRepositoryReturnDTO } from "../../interface/tools.inteface.ts";
 
 interface ICreateToolsEntryDTO {
 	title: string;
@@ -7,12 +8,13 @@ interface ICreateToolsEntryDTO {
 	tags: string[];
 }
 
-interface ICreateToolsReturnDTO extends ICreateToolsEntryDTO {
-	id: string;
+interface ICreateToolsReturnDTO extends Omit<IToolsRepositoryReturnDTO, "_id" | "__v"> {
+	_id: undefined;
+	__v: undefined;
 }
 
 interface ICreateToolsUsecase {
 	execute(dataCreate: ICreateToolsEntryDTO): Promise<IDefaultReturn<ICreateToolsReturnDTO>>;
 }
 
-export { ICreateToolsEntryDTO, ICreateToolsReturnDTO, ICreateToolsUsecase };
+export type { ICreateToolsEntryDTO, ICreateToolsReturnDTO, ICreateToolsUsecase };

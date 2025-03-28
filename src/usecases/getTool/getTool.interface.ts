@@ -5,8 +5,13 @@ interface IGetToolEntryDTO {
 	toolId: string;
 }
 
-interface IGetToolUsecase {
-	execute(dataGet: IGetToolEntryDTO): Promise<IDefaultReturn<IToolsRepositoryReturnDTO>>;
+interface IGetToolReturnDTO extends Omit<IToolsRepositoryReturnDTO, "_id" | "__v"> {
+	_id: undefined;
+	__v: undefined;
 }
 
-export type { IGetToolEntryDTO, IGetToolUsecase };
+interface IGetToolUsecase {
+	execute(dataGet: IGetToolEntryDTO): Promise<IDefaultReturn<IGetToolReturnDTO>>;
+}
+
+export type { IGetToolEntryDTO, IGetToolReturnDTO, IGetToolUsecase };

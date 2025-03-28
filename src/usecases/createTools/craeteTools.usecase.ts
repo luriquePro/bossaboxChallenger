@@ -21,7 +21,7 @@ class CreateToolsUsecase implements ICreateToolsUsecase {
 		}
 
 		const result = await this.toolsRepository.create(dataCreate);
-		return { response: result, is_error: false };
+		return { response: { ...result, _id: undefined, __v: undefined }, is_error: false };
 	}
 
 	private validate(dataCreate: ICreateToolsEntryDTO) {

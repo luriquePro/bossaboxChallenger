@@ -22,12 +22,15 @@ const toolsGetSchema: Schema = {
 		description: { type: "string", description: "The description of the tool", default: "Tool description" },
 		tags: { type: "array", description: "The tags of the tool", default: ["tag1", "tag2"] },
 		status: { type: "string", description: "The status of the tool", default: "ACTIVE", enum: ["ACTIVE", "INACTIVE"] },
+		createdAt: { type: "date", description: "The creation date of the tool", default: "2021-01-01T00:00:00.000Z" },
+		updateAt: { type: "date", description: "The update date of the tool", default: "2021-01-01T00:00:00.000Z" },
 	},
 	required: [],
 };
 
 const ToolsSchema = {
 	ToolsCreate: toolsCreateSchema,
+	ToolsGet: toolsGetSchema,
 };
 
 export { ToolsSchema };

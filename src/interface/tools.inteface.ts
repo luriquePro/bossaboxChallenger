@@ -34,6 +34,7 @@ enum IToolsStatus {
 interface IToolsRepository {
 	findOneByObj(filter: FilterQuery<IToolsDTO>): Promise<IToolsRepositoryReturnDTO | null>;
 	findOneByTitle(title: string): Promise<IToolsRepositoryReturnDTO | null>;
+	findOneById(toolId: string): Promise<IToolsRepositoryReturnDTO | null>;
 	create(dataCreate: IToolsCreateDTO): Promise<IToolsRepositoryReturnDTO>;
 }
 

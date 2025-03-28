@@ -11,6 +11,10 @@ class ToolsRepository implements IToolsRepository {
 		return await this.findOneByObj({ title });
 	}
 
+	public async findOneById(toolId: string): Promise<IToolsRepositoryReturnDTO | null> {
+		return await this.findOneByObj({ id: toolId });
+	}
+
 	public async create(dataCreate: IToolsCreateDTO): Promise<IToolsRepositoryReturnDTO> {
 		return await new Tools(dataCreate).save();
 	}

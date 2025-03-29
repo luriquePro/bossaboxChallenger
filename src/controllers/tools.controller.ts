@@ -9,39 +9,17 @@ class ToolsController {
 	) {}
 
 	public async createTools(req: Request, res: Response) {
-		try {
-			const { title, link, description, tags } = req.body;
-			const result = await this.createToolsUsecase.execute({ title, link, description, tags });
-
-			if (result.is_error) {
-				res.status(result.status_code || 400).json({ ...result, status_code: undefined });
-				return;
-			}
-
-			res.status(201).json({ ...result, status_code: undefined });
-			return;
-		} catch (error) {
-			let messageError = "Something went wrong";
-			res.status(500).json({ is_error: true, message: messageError });
-		}
+		const { title, link, description, tags } = req.body;
+		const result = await this.createToolsUsecase.execute({ title, link, description, tags });
+		res.status(201).json(result);
+		return;
 	}
 
 	public async getTool(req: Request, res: Response) {
-		try {
-			const { toolId } = req.params;
-			const result = await this.getToolUsecase.execute({ toolId });
-
-			if (result.is_error) {
-				res.status(result.status_code || 400).json({ ...result, status_code: undefined });
-				return;
-			}
-
-			res.json({ ...result, status_code: undefined });
-			return;
-		} catch (error) {
-			let messageError = "Something went wrong";
-			res.status(500).json({ is_error: true, message: messageError });
-		}
+		const { toolId } = req.params;
+		const result = await this.getToolUsecase.execute({ toolId });
+		res.json(result);
+		return;
 	}
 }
 

@@ -1,10 +1,11 @@
-import * as yup from "yup";
+import { AnyObject, object } from "yup";
+import { ValidationError } from "./ApiErros.ts";
 
-const YupValidate = (schema: yup.AnyObject, data: object) => {
+const YupValidate = (schema: AnyObject, data: object) => {
 	try {
-		yup.object().shape(schema).validateSync(data);
+		object().shape(schema).validateSync(data);
 	} catch (error: any) {
-		return error.errors;
+		throw new ValidationError(error.errors);
 	}
 };
 

@@ -8,10 +8,7 @@ interface ICreateToolsEntryDTO {
 	tags: string[];
 }
 
-interface ICreateToolsReturnDTO extends Omit<IToolsRepositoryReturnDTO, "_id" | "__v"> {
-	_id: undefined;
-	__v: undefined;
-}
+interface ICreateToolsReturnDTO extends Omit<IToolsRepositoryReturnDTO, "_id" | "__v"> {}
 
 interface ICreateToolsUsecase {
 	execute(dataCreate: ICreateToolsEntryDTO): Promise<IDefaultReturn<ICreateToolsReturnDTO>>;

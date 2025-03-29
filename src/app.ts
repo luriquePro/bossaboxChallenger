@@ -3,10 +3,12 @@ import "express-async-errors";
 
 import express, { Application } from "express";
 import mongoose from "mongoose";
+import { errorMiddleware } from "./middlewares/errorMiddleware.ts";
 import { Routes } from "./routes.ts";
 import { generateSwaggerDoc } from "./swagger.ts";
 class App {
 	private application: Application;
+	private FORMAT_MESSAGE_ON_ERROR = process.env.FORMAT_MESSAGE_ON_ERROR === "true";
 
 	constructor() {
 		this.application = express();
@@ -30,6 +32,10 @@ class App {
 			.catch(err => console.log("DB connection error"));
 
 		this.application.use(Routes);
+
+		if (this.FORMAT_MESSAGE_ON_ERROR) {
+			this.application.use(errorMiddleware);
+		}
 	}
 }
 

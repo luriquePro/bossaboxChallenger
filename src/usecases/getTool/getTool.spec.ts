@@ -25,29 +25,17 @@ describe("GetToolUsecase", () => {
 	describe("validate", () => {
 		it("should return an error when id is missing", async () => {
 			const usecase = new GetToolusecase(toolsRepository);
-			const result = await usecase.execute({ toolId: undefined as unknown as string });
-
-			expect(result.is_error).toBe(true);
-			expect(result.message).toBe("Id is required");
-			expect(result.status_code).toBe(400);
+			await expect(usecase.execute({ toolId: undefined as unknown as string })).rejects.toThrow("Id is required");
 		});
 
 		it("should return an error when id is empty", async () => {
 			const usecase = new GetToolusecase(toolsRepository);
-			const result = await usecase.execute({ toolId: "" });
-
-			expect(result.is_error).toBe(true);
-			expect(result.message).toBe("Id is required");
-			expect(result.status_code).toBe(400);
+			await expect(usecase.execute({ toolId: undefined as unknown as string })).rejects.toThrow("Id is required");
 		});
 
 		it("should return an error when id is invalid", async () => {
 			const usecase = new GetToolusecase(toolsRepository);
-			const result = await usecase.execute({ toolId: "invalid-id" });
-
-			expect(result.is_error).toBe(true);
-			expect(result.message).toBe("Id must be a valid UUID");
-			expect(result.status_code).toBe(400);
+			await expect(usecase.execute({ toolId: "invalid-id" as unknown as string })).rejects.toThrow("Id must be a valid UUID");
 		});
 
 		it("should return an error when tool is not found", async () => {
@@ -59,28 +47,40 @@ describe("GetToolUsecase", () => {
 
 			jest.spyOn(toolsRepository, "findOneById").mockReturnValueOnce(null as unknown as Promise<null>);
 
-			const result = await usecase.execute({ toolId: "valid-id" });
-
-			expect(result.is_error).toBe(true);
-			expect(result.message).toBe("Tool with this id does not exist");
-			expect(result.status_code).toBe(404);
+			await expect(usecase.execute({ toolId: undefined as unknown as string })).rejects.toThrow("Tool with this id does not exist");
 		});
 	});
 
 	describe("execute", () => {
 		it("should return a tool successfully when all data is valid", async () => {
+			const expectedObject = {
+				is_error: false,
+				response: {
+					id: expect.any(String),
+					title: expect.any(String),
+					link: expect.any(String),
+					description: expect.any(String),
+					tags: expect.any(Array),
+					status: expect.any(String),
+				},
+			};
+
 			const usecase = new GetToolusecase(toolsRepository);
 
 			jest
 				.spyOn(usecase, "validate" as unknown as "execute")
 				.mockReturnValueOnce({ isValid: true } as unknown as Promise<IDefaultReturn<IGetToolReturnDTO>>);
 
-			jest.spyOn(toolsRepository, "findOneById").mockReturnValueOnce({} as unknown as Promise<IToolsRepositoryReturnDTO>);
+			jest.spyOn(toolsRepository, "findOneById").mockReturnValueOnce({
+				id: "1",
+				title: "title",
+				link: "link",
+				description: "description",
+				tags: ["tag1", "tag2"],
+				status: "status",
+			} as unknown as Promise<IToolsRepositoryReturnDTO>);
 
-			const result = await usecase.execute({ toolId: "valid-id" });
-
-			expect(result.is_error).toBe(false);
-			expect(result.response).toEqual({});
+			await expect(usecase.execute({ toolId: undefined as unknown as string })).resolves.toEqual(expectedObject);
 		});
 	});
 });

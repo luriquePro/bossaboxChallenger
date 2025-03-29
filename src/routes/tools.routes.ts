@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ToolsController } from "../controllers/tools.controller.ts";
 import { ToolsRepository } from "../repositories/tools.repository.ts";
-import { CreateToolsUsecase } from "../usecases/createTools/craeteTools.usecase.ts";
+import { CreateToolsUsecase } from "../usecases/createTools/createTools.usecase.ts";
 import { GetToolusecase } from "../usecases/getTool/getTool.usecase.ts";
 
 const ToolsRoutes = Router();

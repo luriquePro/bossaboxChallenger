@@ -5,4 +5,15 @@ interface IDefaultReturn<T> {
 	response?: T;
 }
 
-export { IDefaultReturn };
+interface IRequestCounter {
+	count: number;
+	limit_datetime: string;
+}
+
+interface IRateLimit {
+	timeLimitInSeconds?: number;
+	limitRequestPerTime?: number;
+	messageInError?: string;
+}
+
+export type { IDefaultReturn, IRateLimit, IRequestCounter };

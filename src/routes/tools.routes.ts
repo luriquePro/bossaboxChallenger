@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ToolsController } from "../controllers/tools.controller.ts";
+import { RateLimit } from "../middlewares/RateLimitMiddleware.ts";
 import { ToolsRepository } from "../repositories/tools.repository.ts";
 import { CreateToolsUsecase } from "../usecases/createTools/createTools.usecase.ts";
 import { GetToolusecase } from "../usecases/getTool/getTool.usecase.ts";
@@ -15,8 +16,11 @@ const listToolsUsecase = new ListToolsUsecase(toolsRepository);
 
 const toolsController = new ToolsController(createToolsUsecase, getToolUsecase, listToolsUsecase);
 
-ToolsRoutes.post("/", toolsController.createTools.bind(toolsController));
-ToolsRoutes.get("/:toolId", toolsController.getTool.bind(toolsController));
-ToolsRoutes.get("/", toolsController.listTools.bind(toolsController));
+// The rate limit middleware is applied to all routes
+const rateLimitMiddleware = RateLimit({ limitRequestPerTime: 10, timeLimitInSeconds: 30 });
+
+ToolsRoutes.post("/", rateLimitMiddleware, toolsController.createTools.bind(toolsController));
+ToolsRoutes.get("/:toolId", rateLimitMiddleware, toolsController.getTool.bind(toolsController));
+ToolsRoutes.get("/", rateLimitMiddleware, toolsController.listTools.bind(toolsController));
 
 export { ToolsRoutes };

@@ -15,5 +15,5 @@ class ServerAPI {
 	}
 }
 
-const SERVER = new ServerAPI({ application: new App(), port: 3000 });
+const SERVER = new ServerAPI({ application: new App(), port: Number(process.env.PORT) });
 SERVER.run();

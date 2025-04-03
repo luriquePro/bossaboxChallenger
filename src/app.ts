@@ -1,3 +1,4 @@
+import cors from "cors";
 import "dotenv/config";
 import "express-async-errors";
 import helmet from "helmet";
@@ -21,9 +22,24 @@ class App {
 	}
 
 	private config() {
+		this.application.use(
+			cors({
+				origin: (origin, callback) => {
+					const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+
+					if (!origin || allowedOrigins.includes(origin)) {
+						callback(null, true);
+					} else {
+						callback(new Error("Not allowed by CORS"));
+					}
+				},
+				credentials: true,
+			}),
+		);
+
 		this.application.use(express.json());
 
-		this.application.disable("x-powered-by");
+		this.application.disable("X-Powered-By");
 
 		this.application.use(
 			helmet({
@@ -38,6 +54,8 @@ class App {
 				},
 			}),
 		);
+
+		this.application.use(helmet.xssFilter());
 
 		generateSwaggerDoc();
 

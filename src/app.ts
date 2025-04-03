@@ -1,5 +1,6 @@
 import "dotenv/config";
 import "express-async-errors";
+import helmet from "helmet";
 
 import express, { Application } from "express";
 import mongoose from "mongoose";
@@ -23,6 +24,20 @@ class App {
 		this.application.use(express.json());
 
 		this.application.disable("x-powered-by");
+
+		this.application.use(
+			helmet({
+				contentSecurityPolicy: {
+					directives: {
+						defaultSrc: ["'self'"], // Allows only resources from the same domain
+						scriptSrc: ["'self'", "'unsafe-inline'"], // Blocks external scripts
+						objectSrc: ["'none'"], // Blocks plugins like Flash
+						imgSrc: ["'self'", "data:"], // Allows images only from the same domain and base64
+						upgradeInsecureRequests: [], // Forces HTTPS
+					},
+				},
+			}),
+		);
 
 		generateSwaggerDoc();
 

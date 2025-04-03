@@ -46,10 +46,13 @@ class App {
 				contentSecurityPolicy: {
 					directives: {
 						defaultSrc: ["'self'"], // Allows only resources from the same domain
-						scriptSrc: ["'self'", "'unsafe-inline'"], // Blocks external scripts
+						scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"], // Blocks external scripts
+						styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/"], // Blocks external styles
+						fontSrc: ["'self'", "https://fonts.gstatic.com"],
 						objectSrc: ["'none'"], // Blocks plugins like Flash
-						imgSrc: ["'self'", "data:"], // Allows images only from the same domain and base64
+						imgSrc: ["'self'", "data:", "https://framerusercontent.com"], // Allows images only from the same domain and base64
 						upgradeInsecureRequests: [], // Forces HTTPS
+						workerSrc: ["'self'", "blob:"],
 					},
 				},
 			}),

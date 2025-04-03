@@ -118,7 +118,67 @@ const ToolsPath: Paths = {
 				},
 			},
 		},
-		get: {},
+		get: {
+			summary: "List all tools",
+			description: "List all tools",
+			parameters: [
+				{
+					name: "tag",
+					in: "query",
+					description: "Filter by tag",
+					required: false,
+					schema: { type: "string" },
+				},
+				{
+					name: "useRegex",
+					in: "query",
+					description: "Use regex to filter by tag",
+					required: false,
+					schema: { type: "boolean" },
+				},
+			],
+			responses: {
+				"200": {
+					description: "OK",
+					content: {
+						"application/json": {
+							schema: { $ref: "#/components/schemas/ToolsList" },
+							example: {
+								is_error: false,
+								response: [
+									{
+										id: "1",
+										title: "Tool title",
+										link: "https://example.com",
+										description: "Tool description",
+										tags: ["tag1", "tag2"],
+									},
+									{
+										id: "2",
+										title: "Tool title",
+										link: "https://example.com",
+										description: "Tool description",
+										tags: ["tag1", "tag2"],
+									},
+								],
+							},
+						},
+					},
+				},
+				"500": {
+					description: "Something went wrong",
+					content: {
+						"application/json": {
+							schema: { $ref: "#/components/schemas/DefaultError" },
+							example: {
+								is_error: true,
+								message: "Something went wrong",
+							},
+						},
+					},
+				},
+			},
+		},
 		patch: {},
 		delete: {},
 	},

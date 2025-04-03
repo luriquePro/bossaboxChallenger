@@ -21,7 +21,7 @@ const swaggerInfo: Information = {
 	license: { name: "MIT", url: "https://github.com/luriquePro/bossaboxChallenger/blob/master/LICENSE" },
 };
 
-const swaggerServes: Server[] = [{ url: "http://localhost:3000/", description: "Local server", variables: {} }];
+const swaggerServes: Server[] = [{ url: "http://localhost:" + process.env.PORT, description: "Local server", variables: {} }];
 
 const swagerTags: Tag[] = [{ name: "Tools", description: "Endpoints to manage tools" }];
 

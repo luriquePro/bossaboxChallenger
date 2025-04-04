@@ -13,6 +13,8 @@ describe("CreateToolsUsecase", () => {
 			findOneByObj: jest.fn() as IToolsRepository["findOneByObj"],
 			findOneByTitle: jest.fn() as IToolsRepository["findOneByTitle"],
 			findOneById: jest.fn() as IToolsRepository["findOneById"],
+			findByObj: jest.fn() as IToolsRepository["findByObj"],
+			list: jest.fn() as IToolsRepository["list"],
 		};
 
 		toolsDTO = {

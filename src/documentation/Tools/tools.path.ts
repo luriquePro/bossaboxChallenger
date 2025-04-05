@@ -180,7 +180,76 @@ const ToolsPath: Paths = {
 			},
 		},
 		patch: {},
-		delete: {},
+		delete: {
+			summary: "Delete a tool",
+			description: "Delete a tool with the provided id",
+			parameters: [
+				{
+					name: "toolId",
+					in: "path",
+					description: "The id of the tool to delete",
+					required: true,
+					schema: { type: "string" },
+				},
+			],
+			responses: {
+				"200": {
+					description: "OK",
+					content: {
+						"application/json": {
+							schema: { $ref: "#/components/schemas/ToolsDelete" },
+							example: {
+								is_error: false,
+								response: {
+									id: "1",
+									title: "Tool title",
+									link: "https://example.com",
+									description: "Tool description",
+									tags: ["tag1", "tag2"],
+									status: "DELETED",
+								},
+							},
+						},
+					},
+				},
+				"400": {
+					description: "Tool with this id is already deleted",
+					content: {
+						"application/json": {
+							schema: { $ref: "#/components/schemas/DefaultError", required: ["message", "is_error"] },
+							example: {
+								is_error: true,
+								message: "Tool with this id is already deleted",
+							},
+						},
+					},
+				},
+				"404": {
+					description: "Tool with this id does not exist",
+					content: {
+						"application/json": {
+							schema: { $ref: "#/components/schemas/DefaultError", required: ["message", "is_error"] },
+							example: {
+								is_error: true,
+								message: "Tool with this id does not exist",
+							},
+						},
+					},
+				},
+				"500": {
+					description: "Something went wrong",
+					content: {
+						"application/json": {
+							schema: { $ref: "#/components/schemas/DefaultError" },
+							example: {
+								is_error: true,
+								message: "Something went wrong",
+							},
+						},
+					},
+				},
+			},
+		},
 	},
 };
 

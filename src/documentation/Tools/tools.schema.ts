@@ -39,10 +39,23 @@ const toolsListSchema: Schema = {
 	},
 };
 
+const toolDeleteSchema: Schema = {
+	type: "object",
+	properties: {
+		id: { type: "string", description: "The id of the tool", default: "1" },
+		title: { type: "string", description: "The title of the tool", default: "Tool title" },
+		link: { type: "string", description: "The link of the tool", default: "https://example.com" },
+		description: { type: "string", description: "The description of the tool", default: "Tool description" },
+		tags: { type: "array", description: "The tags of the tool", default: ["tag1", "tag2"] },
+		status: { type: "string", description: "The status of the tool", default: "ACTIVE", enum: ["DELETED"] },
+	},
+};
+
 const ToolsSchema = {
 	ToolsCreate: toolsCreateSchema,
 	ToolsGet: toolsGetSchema,
 	ToolsList: toolsListSchema,
+	ToolsDelete: toolDeleteSchema,
 };
 
 export { ToolsSchema };

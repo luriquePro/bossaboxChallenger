@@ -2,9 +2,9 @@ import fs from "fs";
 import path from "path";
 
 import swaggerJSDoc, { Components, Information, OAS3Definition, OAS3Options, Paths, Server, Tag } from "swagger-jsdoc";
-import { ToolsPath } from "./documentation/Tools/tools.path.ts";
-import { ToolsSchema } from "./documentation/Tools/tools.schema.ts";
 import { ErrorSchema } from "./documentation/app/error.schema.ts";
+import { ToolsPath } from "./documentation/tools/tools.path.ts";
+import { ToolsSchema } from "./documentation/tools/tools.schema.ts";
 
 const DIRNAME = process.cwd();
 

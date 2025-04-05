@@ -39,6 +39,8 @@ interface IToolsRepository {
 	findOneById(toolId: string): Promise<IToolsRepositoryReturnDTO | null>;
 	create(dataCreate: IToolsCreateDTO): Promise<IToolsRepositoryReturnDTO>;
 	list(query: IListToolsOptions): Promise<IListToolsReturnDTO[]>;
+	deleteOneByObj(filter: FilterQuery<IToolsDTO>): Promise<void>;
+	deleteOneById(toolId: string): Promise<void>;
 }
 
 interface IListToolsOptions {

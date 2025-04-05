@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import sanitize from "mongo-sanitize";
 import { ICreateToolsUsecase } from "../usecases/createTools/createTools.interface.ts";
+import { IDeleteToolUsecase } from "../usecases/deleteTool/deleteTool.interface.ts";
 import { IGetToolUsecase } from "../usecases/getTool/getTool.interface.ts";
 import { IListToolsEntryDTO, IListToolsUsecase } from "../usecases/listTools/listTools.interface.ts";
 
@@ -9,6 +10,7 @@ class ToolsController {
 		private readonly createToolsUsecase: ICreateToolsUsecase,
 		private readonly getToolUsecase: IGetToolUsecase,
 		private readonly listToolsUsecase: IListToolsUsecase,
+		private readonly deleteToolUsecase: IDeleteToolUsecase,
 	) {}
 
 	public async createTools(req: Request, res: Response) {
@@ -34,6 +36,13 @@ class ToolsController {
 		};
 
 		const result = await this.listToolsUsecase.execute(queryData);
+		res.json(result);
+		return;
+	}
+
+	public async deleteTool(req: Request, res: Response) {
+		const { toolId } = req.params;
+		const result = await this.deleteToolUsecase.execute({ toolId });
 		res.json(result);
 		return;
 	}

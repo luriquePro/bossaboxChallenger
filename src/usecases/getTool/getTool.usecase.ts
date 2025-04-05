@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 import { IDefaultReturn } from "../../interface/app.interface.ts";
-import { IToolsRepository } from "../../interface/tools.inteface.ts";
+import { IToolsRepository, ToolsStatus } from "../../interface/tools.inteface.ts";
 import { NotFoundError } from "../../utils/ApiErros.ts";
 import { YupValidate } from "../../utils/YupValidate.ts";
 import { IGetToolEntryDTO, IGetToolReturnDTO, IGetToolUsecase } from "./getTool.interface.ts";
@@ -15,6 +15,10 @@ class GetToolusecase implements IGetToolUsecase {
 		const toolWithThisIdExists = await this.toolsRepository.findOneById(dataFilter.toolId);
 		if (!toolWithThisIdExists) {
 			throw new NotFoundError("Tool with this id does not exist");
+		}
+
+		if (toolWithThisIdExists.status === ToolsStatus.DELETED) {
+			throw new NotFoundError("Tool with this id is deleted");
 		}
 
 		const response: IGetToolReturnDTO = {

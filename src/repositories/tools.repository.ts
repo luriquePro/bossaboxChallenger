@@ -1,5 +1,12 @@
 import { FilterQuery } from "mongoose";
-import { IListToolsOptions, IToolsCreateDTO, IToolsDTO, IToolsRepository, IToolsRepositoryReturnDTO } from "../interface/tools.inteface.ts";
+import {
+	IListToolsOptions,
+	IToolsCreateDTO,
+	IToolsDTO,
+	IToolsRepository,
+	IToolsRepositoryReturnDTO,
+	ToolsStatus,
+} from "../interface/tools.inteface.ts";
 import { Tools } from "../models/tools.model.ts";
 import { IListToolsReturnDTO } from "../usecases/listTools/listTools.interface.ts";
 
@@ -26,7 +33,7 @@ class ToolsRepository implements IToolsRepository {
 
 	public async list(query: IListToolsOptions): Promise<IListToolsReturnDTO[]> {
 		return await Tools.aggregate([
-			{ $match: query },
+			{ $match: { ...query, status: ToolsStatus.ACTIVE } },
 			{
 				$project: {
 					_id: 0,
@@ -38,6 +45,14 @@ class ToolsRepository implements IToolsRepository {
 				},
 			},
 		]);
+	}
+
+	public async deleteOneByObj(filter: FilterQuery<IToolsDTO>): Promise<void> {
+		await Tools.deleteOne(filter);
+	}
+
+	public async deleteOneById(toolId: string): Promise<void> {
+		await this.deleteOneByObj({ id: toolId });
 	}
 }
 

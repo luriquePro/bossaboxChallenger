@@ -8,6 +8,7 @@ API para gerenciamento de ferramentas de desenvolvimento.
 - [Configuração Inicial](#configuração-inicial)
 - [Execução](#execução)
 - [Testes](#testes)
+- [Segurança](#segurança)
 - [Documentação da API](#documentação-da-api)
 - [Dependências e Requisitos](#dependências-e-requisitos)
 
@@ -30,7 +31,22 @@ cd bossaboxChallenger
 
 ### 2. Configure o ambiente
 
-1. Adicione o arquivo `.env` na pasta raiz do projeto (`./`)
+1. Adicione o arquivo `.env` na pasta raiz do projeto (`./`) com as seguintes variáveis:
+
+   ```.env
+   # Configurações gerais
+   PORT=4000
+   NODE_ENV=development
+
+   # MongoDB
+   MONGODB_URL=mongodb://localhost:27017
+   MONGODB_NAME=bossabox
+
+   # Segurança
+   ALLOWED_ORIGINS=http://localhost:3000,http://localhost:4000
+   FORMAT_MESSAGE_ON_ERROR=true
+   ```
+
 2. Use o NVM para instalar e utilizar a versão correta do Node.js:
    ```bash
    nvm install
@@ -79,6 +95,58 @@ Execute os testes do projeto com:
 ```bash
 npm run test
 ```
+
+## Segurança
+
+A aplicação implementa várias camadas de segurança para proteção contra vulnerabilidades comuns:
+
+### 1. CORS (Cross-Origin Resource Sharing)
+
+O projeto utiliza uma configuração personalizada de CORS que:
+
+- Permite apenas origens específicas definidas na variável de ambiente `ALLOWED_ORIGINS`
+- Habilita credenciais para autenticação entre origens quando necessário
+
+```javascript
+this.application.use(
+	cors({
+		origin: (origin, callback) => {
+			const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				callback(new Error("Not allowed by CORS"));
+			}
+		},
+		credentials: true,
+	}),
+);
+```
+
+### 2. Helmet
+
+A aplicação utiliza o middleware Helmet para implementar várias camadas de proteção:
+
+- **Content Security Policy (CSP)**: Restringe as origens de recursos carregados
+
+  - Scripts permitidos apenas do mesmo domínio e CDNs específicas
+  - Estilos permitidos apenas do mesmo domínio e fontes autorizadas
+  - Bloqueio de objetos como Flash
+  - Imagens permitidas apenas do mesmo domínio e base64
+  - Forçamento de conexões HTTPS
+
+- **Desativação do cabeçalho X-Powered-By**: Oculta informações sobre o servidor
+- **Filtro XSS**: Ativa proteção contra ataques Cross-Site Scripting
+
+### 3. Express Async Errors
+
+Garante que erros assíncronos sejam capturados e tratados adequadamente pelo middleware de erro.
+
+### 4. Tratamento de Erros Centralizado
+
+Um middleware de erro personalizado (`errorMiddleware`) processa e formata todas as respostas de erro quando `FORMAT_MESSAGE_ON_ERROR` está
+habilitado.
 
 ## Documentação da API
 
